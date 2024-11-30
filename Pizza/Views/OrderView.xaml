@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Pizza.Views"
+             xmlns:converter ="clr-namespace:Pizza.Converters"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <UserControl.Resources>
@@ -100,14 +101,16 @@
         </Grid>
 
         <DataGrid Grid.Row="1"
-                  ItemsSource="{Binding OrderItems}"
+                  ItemsSource="{Binding Orders}"
                   AutoGenerateColumns="False"
                   Margin="10"
                   IsReadOnly="True">
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Товар" Binding="{Binding Product.Name}" Width="*"/>
-                <DataGridTextColumn Header="Количество" Binding="{Binding Quantity}" Width="Auto"/>
-                <DataGridTextColumn Header="Цена" Binding="{Binding Price}" Width="Auto"/>
+                <DataGridTextColumn Header="Дата заказа" Binding="{Binding OrderDate}" Width="*" />
+                <DataGridTextColumn Header="Статус" Binding="{Binding OrderStatus.StatusName}" Width="*" />
+                <DataGridTextColumn Header="Сумма" Binding="{Binding ItemsTotal}" Width="*" />
+                <DataGridTextColumn Header="Дата доставки" Binding="{Binding DeliveryDate}" Width="*" />
+                <DataGridTextColumn Header="Адрес доставки" Binding="{Binding DeliveryStreet}" Width="*" />
             </DataGrid.Columns>
         </DataGrid>
 

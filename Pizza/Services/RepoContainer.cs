@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Pizza.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -17,7 +18,7 @@ namespace Pizza.Services
             _container.RegisterType<ICustomerRepository, CustomerRepository>(
                 new ContainerControlledLifetimeManager());
             _container.RegisterType<IOrderRepository, OrderRepository>();
-            _container.RegisterType<IOrderRepository>();
+            _container.RegisterType<OrderViewModel>();
         }
 
         public static IUnityContainer Container

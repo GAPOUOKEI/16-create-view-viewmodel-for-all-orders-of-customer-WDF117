@@ -19,7 +19,7 @@
         <DataTemplate DataType="{x:Type viewModels:OrderPerpViewModel}">
             <views:OrderPrepView/>
         </DataTemplate>
-        <DataTemplate DataType="{x:Type viewModels:OrderViewModer}">
+        <DataTemplate DataType="{x:Type viewModels:OrderViewModel}">
             <views:OrderView/>
         </DataTemplate>
     </Window.Resources>
