@@ -9,16 +9,10 @@ using System.Threading.Tasks;
 
 namespace Pizza.ViewModels
 {
-    class OrderViewModer : BindableBase
+    class OrderViewModel : BindableBase
     {
-        private Guid _id;
-        public Guid Id
-        {
-            get => _id;
-            set => SetProperty(ref _id, value);
-        }
         public readonly IOrderRepository _orderRepository;
-        public OrderViewModer(IOrderRepository orderRepository)
+        public OrderViewModel(IOrderRepository orderRepository)
         {
             _orderRepository = orderRepository;
             CreateOrderCommand = new RelayCommand(OnCreateOrder);
@@ -69,6 +63,12 @@ namespace Pizza.ViewModels
                 OrderDate = DateTime.Now,
                 OrderStatusId = 1
             };
+        }
+        public async Task LoadOrderAsync()
+        {
+            var orders = await _orderRepository.GetOrdersByCustomerAsync(CustomerId);
+            // Сортировка заказов по дате
+            Orders = new ObservableCollection<Order>(orders.OrderByDescending(o => o.OrderDate));
         }
     }
 }

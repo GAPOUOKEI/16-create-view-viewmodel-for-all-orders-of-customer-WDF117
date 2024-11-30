@@ -11,7 +11,7 @@ namespace Pizza.ViewModels
 {
     class CustomerListViewModel : BindableBase
     {
-         private ICustomerRepository _repository;
+         private readonly ICustomerRepository _repository;
          public CustomerListViewModel(ICustomerRepository repository)
          {
 
@@ -23,7 +23,7 @@ namespace Pizza.ViewModels
              AddCustomerCommand = new RelayCommand(OnAddCustomer);
              EditCustomerCommand = new RelayCommand<Customer>(OnEditCustomer);
              ClearSearchInput = new RelayCommand(OnClearSearch);
-             ViewOrdersCommand = new RelayCommand<Customer>(OnViewOrders);
+            ViewOrdersCommand = new RelayCommand<Guid>(OnViewOrders);
         }
     
          private ObservableCollection<Customer>? _customers;
@@ -73,9 +73,10 @@ namespace Pizza.ViewModels
         
          public event Action<Customer> PlaceOrderRequested = delegate { };
          public event Action AddCustomerRequested = delegate { };
-         public event Action<Customer> EditCustomerRequested = delegate { }; 
-        
-         private void OnPlaceOrder(Customer customer)
+         public event Action<Customer> EditCustomerRequested = delegate { };
+         public RelayCommand<Guid> ViewOrdersCommand { get; }
+
+        private void OnPlaceOrder(Customer customer)
          {
              PlaceOrderRequested(customer);
          }
@@ -94,9 +95,16 @@ namespace Pizza.ViewModels
          {
              SearchInput = null;
          }
-        private void OnViewOrders(Customer customer)
+        private void OnViewOrders(Guid customerId)
         {
-            ViewOrdersRequested?.Invoke(customer);
+            NavigationToOrders(customerId);
+        }
+        private void NavigationToOrders(Guid customerId)
+        {
+            var orderViewModel = RepoContainer.Container.Resolve<OrderViewModel>();
+            orderViewModel.CustomerId = customerId;
+            orderViewModel.LoadOrderAsync();
+            CurrentViewModel = orderViewModel;
         }
     }
 }
