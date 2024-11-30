@@ -23,7 +23,8 @@ namespace Pizza.ViewModels
              AddCustomerCommand = new RelayCommand(OnAddCustomer);
              EditCustomerCommand = new RelayCommand<Customer>(OnEditCustomer);
              ClearSearchInput = new RelayCommand(OnClearSearch);
-         }
+             ViewOrdersCommand = new RelayCommand<Customer>(OnViewOrders);
+        }
     
          private ObservableCollection<Customer>? _customers;
          public ObservableCollection<Customer>? Customers
@@ -93,5 +94,9 @@ namespace Pizza.ViewModels
          {
              SearchInput = null;
          }
+        private void OnViewOrders(Customer customer)
+        {
+            ViewOrdersRequested?.Invoke(customer);
+        }
     }
 }
