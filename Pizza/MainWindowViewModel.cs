@@ -16,7 +16,7 @@ namespace Pizza
         private AddEditCustomerViewModel _addEditCustomerVewModel;
         private CustomerListViewModel _customerListViewModel;
         private OrderPerpViewModel _orderPrepViewModel;
-        private OrderViewModer _orderViewModel;
+        private OrderViewModel _orderViewModel;
 
         private ICustomerRepository _customerRepository = new CustomerRepository();
 
@@ -27,11 +27,13 @@ namespace Pizza
             //_addEditCustomerVewModel = new AddEditCustomerViewModel(new CustomerRepository()) ; 
             _customerListViewModel = RepoContainer.Container.Resolve<CustomerListViewModel>();  
             _addEditCustomerVewModel = RepoContainer.Container.Resolve<AddEditCustomerViewModel>();
-
+            _orderViewModel = RepoContainer.Container.Resolve<OrderViewModel>();
             _customerListViewModel.AddCustomerRequested +=NavigationToAddCustomer;
             _customerListViewModel.EditCustomerRequested += NavigationToEditCustomer;
             _customerListViewModel.PlaceOrderRequested += NavigateToOrder;
-           
+            _orderViewModel.Done += NavigateBackToCustomer;
+            _addEditCustomerVewModel.Done += () => CurrentViewModel = _customerListViewModel;
+            _orderPrepViewModel.Done += () => CurrentViewModel = _customerListViewModel;
         }
         private BindableBase _currentViewModel;
         public BindableBase CurrentViewModel
@@ -49,9 +51,13 @@ namespace Pizza
             {
                 case "orderPrep":
                     CurrentViewModel = _orderPrepViewModel; break;
-                case "customers":
+                case "customers": 
+                    CurrentViewModel = _customerListViewModel; break;
+                case "custOrders": 
+                    CurrentViewModel = _orderViewModel; break;
                 default:
-                       CurrentViewModel = _customerListViewModel; break;
+                    CurrentViewModel = _customerListViewModel; break;
+                       
             }
         }
         
@@ -78,9 +84,21 @@ namespace Pizza
         }
 
         //окно для оформления заказа
-        private void NavigateToOrder(Customer customer)
+        private async void NavigateToOrder(Customer customer)
         {
-            _orderViewModel.Id = customer.Id;
+            _orderViewModel.CustomerId=customer.Id;
+            await _orderViewModel.LoadOrderAsync();
+            _orderViewModel.InitializeNeworder();
+            CurrentViewModel = _orderViewModel;
+        }
+        private void NavigateBackToCustomer()
+        {
+            CurrentViewModel = _customerListViewModel;
+        }
+
+        private async void NavigateToCustomerOrders(Customer customer)
+        {
+            _orderViewModel.LoadData(customer.Id);
             CurrentViewModel = _orderViewModel;
         }
     }

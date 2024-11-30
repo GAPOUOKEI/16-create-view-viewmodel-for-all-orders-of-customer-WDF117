@@ -28,5 +28,7 @@ namespace Pizza.Services
         Task<List<ProductSize>> GetAllProductSizesAsync();
         //получить список статусов заказов
         Task<List<OrderStatus>> GetAllOrderStatusesAsync();
+        Task<List<OrderItem>> GetOrderItems();
+        void AttachProduct(Product product);
     }
 }

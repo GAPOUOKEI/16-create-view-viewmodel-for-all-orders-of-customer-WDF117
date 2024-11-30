@@ -10,7 +10,7 @@ namespace Pizza.Services
 {
     public class CustomerRepository : ICustomerRepository
     {
-        private readonly PizzaDbkozlovtsevContext _context = new PizzaDbkozlovtsevContext();
+        private readonly S117Context _context = new S117Context();
 
         public async Task<Customer> AddCustomerAsync(Customer customer)
         {

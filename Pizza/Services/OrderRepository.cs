@@ -11,9 +11,15 @@ namespace Pizza.Services
 {
     internal class OrderRepository :IOrderRepository
     {
-        private readonly PizzaDbkozlovtsevContext _context 
-            = new PizzaDbkozlovtsevContext();
-
+        private readonly S117Context _context 
+            = new S117Context();
+        public void AttachProduct(Product product)
+        {
+            if (_context.Entry(product).State == EntityState.Detached)
+            {
+                _context.Products.Attach(product);
+            }
+        }
         public async Task<Order> AddOrderAsync(Order order)
         {
             _context.Orders.Add(order);
@@ -48,8 +54,8 @@ namespace Pizza.Services
         }
 
         public Task<List<Order>> GetAllOrdersAsync()=> _context.Orders.ToListAsync();
-        
 
+        public Task<List<OrderItem>> GetOrderItems() => _context.OrderItems.Include(p => p.Product).ToListAsync();
         public Task<List<OrderStatus>> GetAllOrderStatusesAsync()=> _context.OrderStatuses.ToListAsync();
 
         public Task<List<ProductOption>> GetAllProductOptionsAsync()=> _context.ProductOptions.ToListAsync();

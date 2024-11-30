@@ -4,13 +4,13 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Pizza.Models;
 
-public partial class PizzaDbkozlovtsevContext : DbContext
+public partial class S117Context : DbContext
 {
-    public PizzaDbkozlovtsevContext()
+    public S117Context()
     {
     }
 
-    public PizzaDbkozlovtsevContext(DbContextOptions<PizzaDbkozlovtsevContext> options)
+    public S117Context(DbContextOptions<S117Context> options)
         : base(options)
     {
     }
@@ -34,7 +34,7 @@ public partial class PizzaDbkozlovtsevContext : DbContext
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
        // => optionsBuilder.UseSqlServer("Server=192.168.147.54;Database=PizzaDBKozlovtsev;User Id=is;Password=1;TrustServerCertificate=true;");
-       => optionsBuilder.UseSqlServer("Server=localhost;Database=PizzaDB;Trusted_Connection=true;TrustServerCertificate=true;");
+       => optionsBuilder.UseSqlServer("Server=192.168.147.54;Database=S117;User Id=is;Password=1;TrustServerCertificate=true;");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

@@ -4,9 +4,130 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Pizza.Views"
+             xmlns:converter ="clr-namespace:Pizza.Converters"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.Resources>
+        <converter:ValueToVisibilityConverter x:Key="VisConverter"/>
+        <converter:ValueToVisibilityConverter x:Key="NegVisConverter" Negate="True"/>
+
+        <Style TargetType="TextBox">
+            <Style.Triggers>
+                <Trigger Property="Validation.HasError" Value="True">
+                    <Setter Property="ToolTip"
+                            Value="{Binding RelativeSource={x:Static RelativeSource.Self}, 
+                                    Path=(Validation.Errors).CurrentItem.ErrorContent}" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </UserControl.Resources>
     <Grid>
-            
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <Grid Name="OrderGrid" Grid.Row="0"
+              DataContext="{Binding Order}"
+              Margin="5"
+              HorizontalAlignment="Center">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition Width="auto"/>
+            </Grid.ColumnDefinitions>
+
+            <TextBlock Text="ID клиента:" 
+                       Grid.Row="0"
+                       Grid.Column="0"
+                       VerticalAlignment="Center"
+                       HorizontalAlignment="Right"
+                       Margin="3"/>
+            <TextBox Text="{Binding CustomerId, ValidatesOnNotifyDataErrors=True}"
+                     Grid.Row="0"
+                     Grid.Column="1"
+                     MinWidth="200"
+                     Margin="3"
+                     IsReadOnly="True"/>
+
+            <TextBlock Text="Статус заказа:" 
+                       Grid.Row="1"
+                       Grid.Column="0"
+                       VerticalAlignment="Center"
+                       HorizontalAlignment="Right"
+                       Margin="3"/>
+            <ComboBox SelectedItem="{Binding OrderStatus}"
+                      ItemsSource="{Binding OrderStatuses}"
+                      DisplayMemberPath="StatusName"
+                      Grid.Row="1"
+                      Grid.Column="1"
+                      MinWidth="200"
+                      Margin="3"/>
+
+            <TextBlock Text="Дата доставки:" 
+                       Grid.Row="2"
+                       Grid.Column="0"
+                       VerticalAlignment="Center"
+                       HorizontalAlignment="Right"
+                       Margin="3"/>
+            <DatePicker SelectedDate="{Binding DeliveryDate}"
+                        Grid.Row="2"
+                        Grid.Column="1"
+                        Margin="3"/>
+
+            <TextBlock Text="Адрес доставки:" 
+                       Grid.Row="3"
+                       Grid.Column="0"
+                       VerticalAlignment="Center"
+                       HorizontalAlignment="Right"
+                       Margin="3"/>
+            <TextBox Text="{Binding DeliveryStreet}"
+                     Grid.Row="3"
+                     Grid.Column="1"
+                     MinWidth="200"
+                     Margin="3"/>
+            <TextBox Text="{Binding DeliveryCity}"
+                     Grid.Row="4"
+                     Grid.Column="1"
+                     MinWidth="200"
+                     Margin="3"/>
+        </Grid>
+
+        <DataGrid Grid.Row="1"
+                  ItemsSource="{Binding Orders}"
+                  AutoGenerateColumns="False"
+                  Margin="10"
+                  IsReadOnly="True">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Дата заказа" Binding="{Binding OrderDate}" Width="*" />
+                <DataGridTextColumn Header="Статус" Binding="{Binding OrderStatus.StatusName}" Width="*" />
+                <DataGridTextColumn Header="Сумма" Binding="{Binding ItemsTotal}" Width="*" />
+                <DataGridTextColumn Header="Дата доставки" Binding="{Binding DeliveryDate}" Width="*" />
+                <DataGridTextColumn Header="Адрес доставки" Binding="{Binding DeliveryStreet}" Width="*" />
+            </DataGrid.Columns>
+        </DataGrid>
+
+        <!-- Кнопки управления -->
+        <StackPanel Name="CommandButtonsPanel" Grid.Row="2"
+              Margin="10">
+            <Button Content="Добавить товар"
+                    Command="{Binding AddItemCommand}"
+                    Grid.Column="0"
+                    MaxWidth="250"
+                    Margin="5"/>
+
+            <Button Content="Сохранить заказ"
+                    Command="{Binding SaveOrderCommand}"
+                    Grid.Column="1"
+                    MaxWidth="250"
+                    Margin="5"/>
+        </StackPanel>
     </Grid>
 </UserControl>
